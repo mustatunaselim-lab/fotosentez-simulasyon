@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fotosentez Laboratuvarı – 10. Sınıf Biyoloji</title>
+<style>
+:root{--bg:#050a12;--g:#4ade80;--c:#22d3ee;--v:#a78bfa;--a:#fbbf24;--r:#fb7185;--t:#e6f1ff;--m:#8aa0b8;--gl:rgba(255,255,255,.06);--bd:rgba(255,255,255,.13)}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(34,211,238,.17),transparent),radial-gradient(800px 500px at 100% 0,rgba(74,222,128,.14),transparent),var(--bg);color:var(--t);font:15px/1.5 'Segoe UI',system-ui,sans-serif;padding:20px;min-height:100vh}
+header{max-width:1280px;margin:0 auto 16px}
+h1{font-size:clamp(26px,4vw,40px);font-weight:700;letter-spacing:-.5px;text-shadow:0 0 26px rgba(74,222,128,.55)}
+.eq{color:var(--m);margin-top:4px}
+main{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:16px}
+.col{display:grid;gap:16px;align-content:start}
+.card{background:var(--gl);border:1px solid var(--bd);border-radius:18px;padding:16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.09)}
+h3{font-size:16px;margin-bottom:10px;color:var(--g);text-shadow:0 0 12px rgba(74,222,128,.55)}
+canvas{width:100%;display:block;border-radius:12px;background:#040810}
+.ctl{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+.ctl label{display:block;font-size:13px;color:var(--m)}
+.ctl b{float:right;color:var(--t);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--g);margin-top:6px}
+.wl{display:flex;gap:8px;flex-wrap:wrap;grid-column:1/-1}
+.wl .btn{flex:1;min-width:120px}
+.wl i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;box-shadow:0 0 9px currentColor}
+.btn{background:var(--gl);border:1px solid var(--bd);color:var(--t);border-radius:12px;padding:8px 12px;cursor:pointer;font:inherit;font-size:13px;transition:.2s}
+.btn:hover{border-color:var(--c)}
+.btn.on{border-color:var(--c);background:rgba(34,211,238,.13);box-shadow:0 0 14px rgba(34,211,238,.45)}
+:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.big{font-size:54px;font-weight:700;color:var(--g);text-shadow:0 0 24px var(--g);line-height:1}
+.bar{height:9px;border-radius:9px;background:rgba(255,255,255,.09);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--c),var(--g));transition:width .25s}
+.bar.lim i{background:linear-gradient(90deg,var(--a),var(--r));box-shadow:0 0 12px var(--a)}
+.row{display:grid;grid-template-columns:70px 1fr 42px;gap:8px;align-items:center;font-size:13px;margin:7px 0;color:var(--m)}
+.cnt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;text-align:center}
+.cnt div{background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:12px;padding:8px 4px;font-size:12px;color:var(--m)}
+.cnt b{display:block;font-size:20px;color:var(--t)}
+.ph{padding:10px 12px;border-radius:14px;border:1px solid var(--bd);margin-bottom:10px;font-size:13px;color:var(--m);transition:.3s}
+.ph b{color:var(--t)}
+.ph .bar{margin-top:8px}
+#ph1.act{border-color:var(--g);box-shadow:0 0 16px rgba(74,222,128,.35)}
+#ph2.act{border-color:var(--a);box-shadow:0 0 16px rgba(251,191,36,.35)}
+#ph2 .bar i{background:linear-gradient(90deg,var(--a),#f59e0b)}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.info div{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--bd);font-size:14px;color:var(--m)}
+.info h4{color:var(--c);margin-bottom:4px;font-size:15px}
+.q-opt{display:block;width:100%;text-align:left;margin:7px 0;padding:10px 14px;font-size:14px}
+.ok{border-color:var(--g)!important;box-shadow:0 0 14px var(--g)}
+.no{border-color:var(--r)!important;box-shadow:0 0 14px var(--r)}
+@media(max-width:900px){main{grid-template-columns:1fr}.ctl{grid-template-columns:1fr}body{padding:12px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+<h1>Fotosentez Laboratuvarı</h1>
+<p class="eq">10. sınıf biyoloji: 6CO₂ + 12H₂O + ışık enerjisi → C₆H₁₂O₆ + 6O₂ + 6H₂O</p>
+</header>
+<main>
+<div class="col">
+<div class="card"><canvas id="cv" width="900" height="500" aria-label="Kloroplast animasyonu"></canvas></div>
+<div class="card"><h3>Deney kontrolleri</h3><div class="ctl" id="ctl"></div></div>
+</div>
+<div class="col">
+<div class="card">
+<h3>Fotosentez hızı</h3>
+<div class="big" id="rate">0%</div>
+<div id="lim" style="color:var(--a);margin:8px 0 10px;font-size:13px"></div>
+<div id="bars"></div>
+<div class="cnt"><div>O₂<b id="nO">0</b></div><div>Glikoz<b id="nG">0</b></div><div>ATP<b id="nA">0</b></div><div>NADPH<b id="nN">0</b></div></div>
+</div>
+<div class="card"><h3>Sıcaklık ve enzim etkinliği</h3><canvas id="gr" width="440" height="200"></canvas><p id="tmsg" style="font-size:13px;margin-top:8px;color:var(--m)"></p></div>
+<div class="card">
+<h3>Reaksiyon evreleri</h3>
+<div class="ph" id="ph1"><b>Işığa bağımlı reaksiyonlar</b> (granum, tilakoit zar)<br>Klorofil ışığı soğurur, su fotolizle parçalanır ve O₂ çıkar; ATP ile NADPH üretilir.<div class="bar"><i id="p1"></i></div></div>
+<div class="ph" id="ph2"><b>Işıktan bağımsız reaksiyonlar (Calvin döngüsü)</b> (stroma)<br>CO₂ tutulur; ATP ve NADPH kullanılarak glikoz sentezlenir.<div class="bar"><i id="p2"></i></div></div>
+</div>
+</div>
+</main>
+<div class="card" style="max-width:1280px;margin:16px auto 0">
+<div class="tabs"><button class="btn on" data-t="s">Konu özeti</button><button class="btn" data-t="q">Soru çöz (Quiz)</button></div>
+<div id="tS" class="info">
+<div><h4>Fotosentez nedir?</h4>Ototrof canlıların ışık enerjisini glikozun kimyasal bağ enerjisine çevirdiği anabolik tepkimelerdir. Bitkilerde kloroplastta gerçekleşir.</div>
+<div><h4>Işığa bağımlı evre</h4>Granumlardaki tilakoit zarda gerçekleşir. Işıkla su parçalanır (fotoliz), O₂ açığa çıkar, ATP ve NADPH oluşur.</div>
+<div><h4>Calvin döngüsü</h4>Stromada gerçekleşir. CO₂, ATP ve NADPH kullanılarak glikoz sentezlenir; doğrudan ışık gerektirmez.</div>
+<div><h4>Liebig minimum yasası</h4>Hızı, ihtiyaç duyulan faktörlerden en az bulunanı belirler. Sınırlayıcı olmayan faktörü artırmak hızı yükseltmez.</div>
+<div><h4>Sıcaklık</h4>Tepkimeleri enzimler yürütür. Optimum yaklaşık 25–30 °C'dir; 40 °C üzerinde enzimler denatüre olur ve fotosentez durur.</div>
+<div><h4>Dalga boyu ve klorofil</h4>Klorofil mor-mavi ve kırmızı ışığı en çok soğurur, yeşili yansıtır. Klorofil azaldıkça ışık kullanımı düşer.</div>
+</div>
+<div id="tQ" hidden></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),R=Math.random,TAU=Math.PI*2,FF="'Segoe UI',system-ui,sans-serif";
+const S={light:80,co2:70,temp:27,chl:100,wl:'white'};
+const WL={white:{f:.85,c:'#fff4b0',n:'Beyaz'},violet:{f:1,c:'#a78bfa',n:'Mor-mavi (430 nm)'},red:{f:.95,c:'#ff4d6d',n:'Kırmızı (680 nm)'},green:{f:.08,c:'#4ade80',n:'Yeşil (550 nm)'}};
+const LN=['Işık / klorofil / dalga boyu','CO₂ derişimi','Sıcaklık (enzim etkinliği)'];
+const tf=t=>t<=0||t>=40?0:t<25?Math.pow(t/25,1.6):t<=30?1:1-Math.pow((t-30)/10,1.5);
+function calc(){const lf=S.light/100*WL[S.wl].f*S.chl/100,cf=S.co2/100,t=tf(S.temp),a=[lf,cf,t],r=Math.min(...a);return{lf,cf,t,r,li:a.indexOf(r)}}
+
+/* ---------- Kontroller ---------- */
+const CT=[['light','☀️ Işık şiddeti',0,100,v=>`%${v} (${(v*1000).toLocaleString('tr')} lux)`],['co2','🫧 CO₂ derişimi',0,100,v=>`%${v} (${v*10} ppm)`],['temp','🌡️ Ortam sıcaklığı',0,50,v=>v+' °C'],['chl','🍃 Klorofil miktarı',10,100,v=>'%'+v]];
+$('#ctl').innerHTML=CT.map(([k,n,a,b])=>`<label>${n}<b id="v_${k}"></b><input type="range" id="${k}" min="${a}" max="${b}" value="${S[k]}"></label>`).join('')+'<div class="wl" id="wl"></div>';
+$('#wl').innerHTML=Object.entries(WL).map(([k,w])=>`<button class="btn${k==S.wl?' on':''}" data-w="${k}"><i style="background:${w.c};color:${w.c}"></i>${w.n}</button>`).join('');
+$('#wl').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.wl=b.dataset.w;document.querySelectorAll('#wl button').forEach(x=>x.classList.toggle('on',x===b))};
+CT.forEach(([k])=>$('#'+k).oninput=e=>{S[k]=+e.target.value;upd()});
+$('#bars').innerHTML=[['Işık','bL'],['CO₂','bC'],['Sıcaklık','bT']].map(([n,id])=>`<div class="row"><span>${n}</span><div class="bar" id="${id}"><i></i></div><span id="${id}v"></span></div>`).join('');
+function upd(){CT.forEach(([k,,,,f])=>$('#v_'+k).textContent=f(S[k]));graph();
+ const T=S.temp;$('#tmsg').textContent=T>=40?'40 °C üzeri: enzimler denatüre oldu, fotosentez durdu.':T>=25&&T<=30?'Optimum aralık: enzimler en yüksek etkinlikte.':T<25?'Soğuk ortam: enzim tepkimeleri yavaş.':'Optimumun üstü: enzim etkinliği düşüyor.'}
+
+/* ---------- Sıcaklık grafiği ---------- */
+const gx=$('#gr').getContext('2d');
+function graph(){const w=440,h=200,l=34,pw=w-l-12,ph=h-38,X=t=>l+t/50*pw,Y=v=>12+(1-v)*ph;
+ gx.clearRect(0,0,w,h);gx.fillStyle='#040810';gx.fillRect(0,0,w,h);
+ gx.fillStyle='rgba(74,222,128,.15)';gx.fillRect(X(25),12,X(30)-X(25),ph);gx.fillStyle='rgba(251,113,133,.15)';gx.fillRect(X(40),12,X(50)-X(40),ph);
+ gx.strokeStyle='rgba(255,255,255,.22)';gx.lineWidth=1;gx.beginPath();gx.moveTo(l,12);gx.lineTo(l,12+ph);gx.lineTo(l+pw,12+ph);gx.stroke();
+ gx.beginPath();for(let t=0;t<=50;t+=.5)gx[t?'lineTo':'moveTo'](X(t),Y(tf(t)));
+ gx.strokeStyle='#22d3ee';gx.lineWidth=3;gx.shadowColor='#22d3ee';gx.shadowBlur=10;gx.stroke();gx.shadowBlur=0;
+ const cx=X(S.temp),cy=Y(tf(S.temp));gx.strokeStyle='rgba(255,255,255,.35)';gx.lineWidth=1;gx.setLineDash([4,4]);gx.beginPath();gx.moveTo(cx,12);gx.lineTo(cx,12+ph);gx.stroke();gx.setLineDash([]);
+ gx.fillStyle='#fbbf24';gx.shadowColor='#fbbf24';gx.shadowBlur=14;gx.beginPath();gx.arc(cx,cy,6,0,TAU);gx.fill();gx.shadowBlur=0;
+ gx.fillStyle='#8aa0b8';gx.font='11px '+FF;gx.textAlign='center';[0,10,20,30,40,50].forEach(t=>gx.fillText(t+'°C',X(t),h-8));
+ gx.textAlign='left';gx.fillText('Enzim etkinliği',l+6,26);gx.fillStyle='#4ade80';gx.fillText('optimum',X(25)-2,12+ph-6);gx.fillStyle='#fb7185';gx.fillText('denatürasyon',X(40)-10,12+ph-6)}
+
+/* ---------- Kloroplast simülasyonu ---------- */
+const cv=$('#cv'),ctx=cv.getContext('2d'),W=900,H=500,CX=450,CY=285,RX=290,RY=165;
+const G=[[-175,-30],[-60,52],[65,-42],[178,34]].map(([a,b])=>({x:CX+a,y:CY+b,fl:0}));
+let P=[],Ph=[],acc=0,cal=0,N={o:0,g:0,a:0,n:0,c:0};
+const inEl=(a,b)=>((a-CX)/RX)**2+((b-CY)/RY)**2<1;
+const mv=(p,s)=>{const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy);if(d<s+1)return 1;p.x+=dx/d*s;p.y+=dy/d*s;return 0};
+const newPh=()=>{const a=60+R()*780,tx=CX+(R()-.5)*RX*1.6,d=Math.hypot(tx-a,CY+6);return{x:a,y:-6,vx:(tx-a)/d*5.5,vy:(CY+6)/d*5.5,st:0}};
+function cycle(){const g=G[R()*4|0];
+ for(let i=0;i<2;i++)P.push({k:'h',x:25,y:CY+50+R()*90,tx:g.x+(R()-.5)*30,ty:g.y+(R()-.5)*20,d:i*14,g,last:i});
+ P.push({k:'c',x:W-25,y:CY-30+R()*130,tx:CX,ty:CY})}
+function release(g){N.o++;P.push({k:'o',x:g.x,y:g.y-26,vx:(R()-.5)*1.2,vy:-1.5});
+ for(let i=0;i<3;i++){N.a++;P.push({k:'t',t:'a',x:g.x+i*7-7,y:g.y+8,tx:CX+(R()-.5)*30,ty:CY+(R()-.5)*30})}
+ for(let i=0;i<2;i++){N.n++;P.push({k:'t',t:'n',x:g.x+i*9-5,y:g.y-6,tx:CX+(R()-.5)*30,ty:CY+(R()-.5)*30})}}
+function step(K){
+ if(R()<S.light/100*.55)Ph.push(newPh());
+ Ph=Ph.filter(p=>{
+  if(p.st==1){p.tx=p.g.x;p.ty=p.g.y;if(mv(p,5)){p.g.fl=1;return 0}return 1}
+  const was=inEl(p.x,p.y);p.x+=p.vx;p.y+=p.vy;
+  if(p.st==0&&!was&&inEl(p.x,p.y)){if(R()<WL[S.wl].f*(.4+.6*S.chl/100)){p.st=1;p.g=G[R()*4|0]}else{p.st=2;p.vy=-Math.abs(p.vy)*.9;p.vx+=(R()-.5)*4}}
+  return p.y>-30&&p.y<H&&p.x>-20&&p.x<W+20});
+ acc+=K.r*.045;if(acc>=1){acc--;cycle()}
+ P=P.filter(p=>{
+  if(p.k=='h'){if(p.d>0){p.d--;return 1}if(mv(p,3.2)){p.g.fl=1;if(p.last)release(p.g);return 0}return 1}
+  if(p.k=='o'){p.x+=p.vx;p.y+=p.vy;p.vx+=(R()-.5)*.1;return p.y>-20}
+  if(p.k=='t'){if(mv(p,2.4)){cal=1;return 0}return 1}
+  if(p.k=='c'){if(mv(p,3)){cal=1;if(++N.c%6==0){N.g++;P.push({k:'g',x:CX,y:CY,tx:W-70,ty:H-50,l:1})}return 0}return 1}
+  if(p.k=='g'){if(mv(p,1.7))p.l-=.02;return p.l>0}
+  return 0})}
+function mol(p,col,s,r,al=1){ctx.globalAlpha=al;ctx.shadowColor=col;ctx.shadowBlur=12;ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,p.y,r,0,TAU);ctx.fill();ctx.shadowBlur=0;
+ if(s){ctx.fillStyle='#04121a';ctx.font=`bold ${Math.max(8,r*.8)}px ${FF}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s,p.x,p.y+1)}ctx.globalAlpha=1}
+function L(s,a,b,col,sz=12){ctx.font=`${sz}px ${FF}`;ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillStyle=col||'rgba(230,241,255,.85)';ctx.fillText(s,a,b)}
+function draw(t,K){
+ const hot=S.temp>=40,wc=WL[S.wl].c;
+ const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#071427');bg.addColorStop(1,'#04100f');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+ const sun=ctx.createRadialGradient(CX,-40,10,CX,-40,380);sun.addColorStop(0,wc);sun.addColorStop(1,wc+'00');ctx.globalAlpha=S.light/100*.26;ctx.fillStyle=sun;ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;
+ const sg=ctx.createRadialGradient(CX,CY,20,CX,CY,RX);sg.addColorStop(0,hot?'#4a1a22':'#0f4a35');sg.addColorStop(1,hot?'#2b0d14':'#07251f');
+ ctx.fillStyle=sg;ctx.strokeStyle=hot?'#fb7185':'#4ade80';ctx.lineWidth=5;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=24;
+ ctx.beginPath();ctx.ellipse(CX,CY,RX,RY,0,0,TAU);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+ ctx.lineWidth=2;ctx.strokeStyle='rgba(167,243,208,.45)';ctx.beginPath();ctx.ellipse(CX,CY,RX-14,RY-14,0,0,TAU);ctx.stroke();
+ ctx.strokeStyle='rgba(74,222,128,.35)';ctx.lineWidth=3;ctx.beginPath();
+ G.forEach((g,i)=>{const n=G[(i+1)%4];ctx.moveTo(g.x,g.y);ctx.quadraticCurveTo((g.x+n.x)/2,(g.y+n.y)/2+(i%2?28:-28),n.x,n.y)});ctx.stroke();
+ G.forEach(g=>{g.fl*=.94;const gl=ctx.createRadialGradient(g.x,g.y,5,g.x,g.y,75);gl.addColorStop(0,`rgba(250,240,150,${g.fl*.7})`);gl.addColorStop(1,'rgba(250,240,150,0)');ctx.fillStyle=gl;ctx.fillRect(g.x-80,g.y-80,160,160);
+  for(let i=0;i<4;i++){ctx.fillStyle='#16a34a';ctx.strokeStyle='#86efac';ctx.lineWidth=1.5;ctx.beginPath();ctx.roundRect(g.x-32,g.y-26+i*14,64,11,6);ctx.fill();ctx.stroke()}});
+ cal*=.93;ctx.save();ctx.translate(CX,CY);ctx.rotate(t*.0006*(.3+K.r*3));ctx.setLineDash([9,7]);ctx.lineWidth=3;ctx.strokeStyle=`rgba(251,191,36,${.45+cal*.55})`;ctx.shadowColor='#fbbf24';ctx.shadowBlur=8+cal*18;ctx.beginPath();ctx.arc(0,0,32,0,TAU);ctx.stroke();ctx.restore();
+ L('Granum',G[0].x,G[0].y+48);L('Tilakoit zar',G[3].x,G[3].y+48);L('Calvin',CX,CY+4,'#fbbf24');L('Stroma',CX,CY+RY-28);L('Dış zar',CX-RX+34,CY-RY+46,'rgba(134,239,172,.8)',11);
+ L('H₂O →',46,CY+38,'#38bdf8');L('← CO₂',W-46,CY-42,'#a78bfa');L('O₂ ↑',CX,20,'#67e8f9',13);L('Glikoz ↘',W-62,H-14,'#fbbf24');L('☀ Işık',64,20,wc,13);
+ if(hot)L('Enzimler denatüre oldu!',CX,CY-RY+34,'#fb7185',17);
+ P.forEach(p=>{
+  if(p.k=='h'){if(!(p.d>0))mol(p,'#38bdf8','H₂O',10)}
+  else if(p.k=='o')mol(p,'rgba(103,232,249,.9)','O₂',10);
+  else if(p.k=='t')mol(p,p.t=='a'?'#facc15':'#f472b6',p.t=='a'?'A':'N',6.5);
+  else if(p.k=='c')mol(p,'#a78bfa','CO₂',11);
+  else if(p.k=='g'){mol(p,'#fbbf24','',11,p.l);ctx.globalAlpha=p.l;L('C₆H₁₂O₆',p.x,p.y+26,'#fbbf24',11);ctx.globalAlpha=1}});
+ ctx.globalCompositeOperation='lighter';
+ Ph.forEach(p=>{ctx.strokeStyle=wc;ctx.globalAlpha=.35;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p.x-p.vx*4,p.y-p.vy*4);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle=wc;ctx.beginPath();ctx.arc(p.x,p.y,3.2,0,TAU);ctx.fill()});
+ ctx.globalCompositeOperation='source-over'}
+
+/* ---------- Göstergeler ---------- */
+function hud(K){
+ $('#rate').textContent=Math.round(K.r*100)+'%';
+ $('#lim').textContent=(K.r<.02?'Fotosentez durmuş durumda. ':'')+'Sınırlayıcı faktör (Liebig): '+LN[K.li];
+ [['bL',K.lf],['bC',K.cf],['bT',K.t]].forEach(([id,v],i)=>{$('#'+id+' i').style.width=Math.min(100,v*100)+'%';$('#'+id).classList.toggle('lim',i===K.li);$('#'+id+'v').textContent=Math.round(v*100)+'%'});
+ const p1=Math.min(K.lf,K.t);
+ $('#p1').style.width=p1*100+'%';$('#p2').style.width=K.r*100+'%';
+ $('#ph1').classList.toggle('act',p1>.05);$('#ph2').classList.toggle('act',K.r>.05);
+ $('#nO').textContent=N.o;$('#nG').textContent=N.g;$('#nA').textContent=N.a;$('#nN').textContent=N.n}
+function loop(t){const K=calc();step(K);draw(t,K);hud(K);requestAnimationFrame(loop)}
+
+/* ---------- Sekmeler ve quiz ---------- */
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));$('#tS').hidden=b.dataset.t!='s';$('#tQ').hidden=b.dataset.t!='q'});
+const Q=[
+['Fotosentezde açığa çıkan O₂\'nin kaynağı hangisidir?',['CO₂','H₂O','Glikoz','ATP'],1,'Işığa bağımlı evrede suyun fotolizi sonucu O₂ oluşur.'],
+['Işığa bağımlı reaksiyonlar kloroplastın neresinde gerçekleşir?',['Stroma','Dış zar','Tilakoit zar','Sitoplazma'],2,'Klorofil ve elektron taşıma sistemi granumdaki tilakoit zarlardadır.'],
+['Calvin döngüsünde glikoz sentezi için hangi maddeler kullanılır?',['O₂ ve H₂O','CO₂, ATP ve NADPH','Yalnızca ışık','Glikoz ve O₂'],1,'CO₂ tutulur; ATP enerji, NADPH indirgeme gücü sağlar.'],
+['Klorofil hangi renkteki ışığı en az soğurur?',['Mor-mavi','Kırmızı','Yeşil','Mavi'],2,'Yeşil ışık büyük oranda yansır; yapraklar bu yüzden yeşil görünür.'],
+['Sıcaklık 45 °C\'ye çıkarsa fotosentez hızı neden düşer?',['CO₂ artar','Işık azalır','Enzimler denatüre olur','Klorofil artar'],2,'Yüksek sıcaklık enzimlerin yapısını bozar; tepkimeler yavaşlar veya durur.'],
+['Işık sabitken CO₂ artırılıyor ve hız artmıyor. Bunun nedeni nedir?',['Fotosentez bitmiştir','Başka bir faktör sınırlayıcı olmuştur','Klorofil yok olmuştur','O₂ artmıştır'],1,'Liebig minimum yasası: hızı, en az bulunan faktör belirler.']];
+let qi=0,sc=0,lock=0;
+function quiz(){const T=$('#tQ');
+ if(qi>=Q.length){T.innerHTML=`<h3>Sonuç: ${sc} / ${Q.length}</h3><p style="margin-bottom:10px">${sc>=5?'Harika, konuyu çok iyi biliyorsun!':sc>=3?'İyi gidiyorsun; konu özetine bir göz at ve tekrar dene.':'Simülasyonda faktörleri değiştirerek deney yap, sonra yeniden dene.'}</p><button class="btn" id="rs">Yeniden başla</button>`;$('#rs').onclick=()=>{qi=sc=0;quiz()};return}
+ const [q,o,a,e]=Q[qi];
+ T.innerHTML=`<h3>Soru ${qi+1} / ${Q.length}</h3><p style="margin-bottom:8px">${q}</p>`+o.map((x,i)=>`<button class="btn q-opt" data-i="${i}">${String.fromCharCode(65+i)}) ${x}</button>`).join('')+'<p id="fb" style="margin:10px 0;font-size:14px"></p>';
+ T.onclick=ev=>{const b=ev.target.closest('.q-opt');if(!b||lock)return;lock=1;const i=+b.dataset.i;if(i==a)sc++;
+  T.querySelectorAll('.q-opt').forEach((x,j)=>{if(j==a)x.classList.add('ok');else if(j==i)x.classList.add('no')});
+  $('#fb').innerHTML=(i==a?'✅ Doğru! ':'❌ Yanlış. ')+e+'<br><button class="btn" id="nx" style="margin-top:8px">'+(qi==Q.length-1?'Sonucu gör':'Sonraki soru')+'</button>';
+  $('#nx').onclick=()=>{qi++;lock=0;quiz()}}}
+upd();quiz();requestAnimationFrame(loop);
+</script>
+</body>
+</html>
